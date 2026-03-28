@@ -1,0 +1,106 @@
+﻿# ================================
+# Unreal Engine 5 .gitignore
+# ================================
+
+# Build results
+Binaries/
+Build/
+DerivedDataCache/
+Intermediate/
+Saved/
+
+# Visual Studio files
+.vs/
+*.VC.db
+*.VC.opendb
+*.suo
+*.user
+*.userprefs
+*.sln.docstates
+
+# Rider / JetBrains
+.idea/
+
+# VSCode
+.vscode/
+
+# Mac / Linux junk
+.DS_Store
+*.swp
+
+# Logs
+*.log
+
+# Compiled source files
+*.obj
+*.o
+*.so
+*.dll
+*.lib
+*.dylib
+*.exe
+
+# Unreal generated project files
+*.opensdf
+*.sdf
+
+# Crash reports
+crashinfo-*
+
+# Autosaves
+Saved/Autosaves/
+
+# Backup files
+Saved/Backup/
+
+# Config backups
+Saved/Config/WindowsEditor/
+
+# Ignore local shader cache
+DerivedDataCache/
+
+# Ignore local build files
+Engine/Intermediate/
+Engine/Saved/
+
+# Ignore packaged builds
+*.ipa
+*.apk
+
+# Ignore Unreal Engine generated files
+*.target
+*.modules
+*.version
+
+# Ignore IDE project files (optional if you want to regenerate)
+*.sln
+*.xcodeproj
+*.xcworkspace
+
+# Ignore temporary files
+*.tmp
+*.temp
+
+# Ignore Git LFS lock files
+*.lock
+
+# Ignore Python cache (sometimes used in UE tools)
+__pycache__/
+*.pyc
+
+# Ignore node modules (if using web UI tools)
+node_modules/
+
+# Ignore plugin intermediates
+Plugins/*/Intermediate/
+Plugins/*/Binaries/
+
+# Ignore build receipts
+*.receipt
+*.manifest
+
+# Ignore Pak files (optional depending on workflow)
+*.pak
+
+# Ignore local config overrides (keep Default*.ini)
+Config/DefaultEditorPerProjectUserSettings.ini
