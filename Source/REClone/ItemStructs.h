@@ -30,4 +30,21 @@ struct FItemData
 	// Numerical effect value
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	float EffectValue;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	int MaxQuantity;
+};
+
+USTRUCT(BlueprintType)
+struct FInventorySlot
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="InventorySlotData")
+	FItemData ItemData;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="InventorySlotData")
+	int Quantity;
+	
+	
 };

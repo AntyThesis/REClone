@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "ItemStructs.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "PickupItemBase.generated.h"
@@ -14,6 +15,11 @@ class RECLONE_API APickupItemBase : public AActor
 public:	
 	// Sets default values for this actor's properties
 	APickupItemBase();
+	
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FItemData ItemData;
+	
 
 protected:
 	// Called when the game starts or when spawned

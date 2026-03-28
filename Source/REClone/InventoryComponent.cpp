@@ -32,3 +32,48 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	// ...
 }
 
+
+// When "Add Item" is called
+void UInventoryComponent::AddItem(const FInventorySlot& InventorySlotToAdd)
+{
+	for (int32 i = 0; i < InventorySlots.Num(); i++)
+	{
+		if (InventorySlots[i].ItemData.ItemName.EqualTo(InventorySlotToAdd.ItemData.ItemName))
+		{
+			InventorySlots[i].Quantity += InventorySlotToAdd.Quantity;
+			
+			if (InventorySlots[i].Quantity > InventorySlots[i].ItemData.MaxQuantity)
+			{
+				InventorySlots[i].Quantity = InventorySlots[i].ItemData.MaxQuantity;
+				OnItemAdded.Broadcast();
+			}
+			return;
+		}
+		
+	}
+	InventorySlots.Add(InventorySlotToAdd);
+	OnItemAdded.Broadcast();
+}
+
+
+// When "Remove item" is called
+void UInventoryComponent::RemoveItem(const FInventorySlot& InventorySlotToRemove)
+{
+	for (int32 i = 0; i < InventorySlots.Num(); i++)
+	{
+		if (InventorySlots[i].ItemData.ItemName.EqualTo(InventorySlotToRemove.ItemData.ItemName))
+		{
+			InventorySlots[i].Quantity -= InventorySlotToRemove.Quantity;
+		
+			
+			if (InventorySlots[i].Quantity <= 0)
+			{
+				InventorySlots.RemoveAt(i);
+				
+			}
+			OnItemRemoved.Broadcast();
+			return;
+		}
+	}
+}
+
