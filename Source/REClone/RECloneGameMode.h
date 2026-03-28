@@ -13,6 +13,7 @@ class ARECloneGameMode : public AGameModeBase
 
 public:
 	ARECloneGameMode();
+	
 };
 
 
