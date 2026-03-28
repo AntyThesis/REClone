@@ -23,5 +23,6 @@ struct FItemData
 	UStaticMesh* ItemMesh;
 	
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	EffectEnum EffectType;
 	
 };
