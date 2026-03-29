@@ -3,6 +3,7 @@
 #include "RECloneCharacter.h"
 
 
+#include "ItemInterface.h"
 #include "PickupItemBase.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Camera/CameraComponent.h"
@@ -74,8 +75,8 @@ void ARECloneCharacter::Interact()
 	
 	if (OverlappingActors.Num() > 0)
 	{
-		APickupItemBase* PickupItem = Cast<APickupItemBase>(OverlappingActors[0]);
-		if (PickupItem)
+		
+		if (APickupItemBase* PickupItem = Cast<APickupItemBase>(OverlappingActors[0]))
 		{
 			FInventorySlot InventorySlotToAdd;
 			
@@ -83,6 +84,11 @@ void ARECloneCharacter::Interact()
 			InventorySlotToAdd.Quantity = 1;
 			
 			InventoryComponent->AddItem(InventorySlotToAdd);
+			
+			if (PickupItem->GetClass()->ImplementsInterface(UItemInterface::StaticClass()))
+			{
+				IItemInterface::Execute_OnPickup(PickupItem);
+			}
 		}
 	}
 	

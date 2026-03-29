@@ -29,7 +29,7 @@ public:
 	FOnItemRemoved OnItemRemoved;
 
 	
-	// Inventory
+	// Inventoryv
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TArray<FInventorySlot> InventorySlots;
 
