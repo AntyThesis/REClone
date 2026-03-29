@@ -2,7 +2,7 @@
 
 #pragma once
 
-
+#include "InventoryComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "RECloneCharacter.generated.h"
@@ -14,6 +14,9 @@ class ARECloneCharacter : public ACharacter
 
 public:
 	ARECloneCharacter();
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UInventoryComponent* InventoryComponent;
 
 	// Called every frame.
 	virtual void Tick(float DeltaSeconds) override;
@@ -22,6 +25,10 @@ public:
 	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+	void Interact();
 
 
 private:
