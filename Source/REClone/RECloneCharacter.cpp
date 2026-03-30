@@ -66,39 +66,39 @@ void ARECloneCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 void ARECloneCharacter::Interact()
 {
 	TArray<AActor*> OverlappingActors;
-	
+
 	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
 	ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_WorldDynamic));
-	
-	UKismetSystemLibrary::SphereOverlapActors(GetWorld(),GetActorLocation(),100.f,ObjectTypes,APickupItemBase::StaticClass(),TArray<AActor*>(),OverlappingActors);
-	DrawDebugSphere(GetWorld(),GetActorLocation(),100.f,12,FColor::White,false,5.f);
-	
+
+	UKismetSystemLibrary::SphereOverlapActors(
+		GetWorld(),
+		GetActorLocation(),
+		100.f,
+		ObjectTypes,
+		APickupItemBase::StaticClass(),
+		TArray<AActor*>(),
+		OverlappingActors
+	);
+
+	DrawDebugSphere(GetWorld(), GetActorLocation(), 100.f, 12, FColor::White, false, 5.f);
+
 	if (OverlappingActors.Num() > 0)
 	{
 		if (APickupItemBase* PickupItem = Cast<APickupItemBase>(OverlappingActors[0]))
 		{
 			FInventorySlot InventorySlotToAdd;
-			
-			InventorySlotToAdd.ItemData = PickupItem->ItemData;
+
+			// ✅ Use RowHandle instead of ItemData
+			InventorySlotToAdd.RowHandle = PickupItem->ItemDataHandle;
 			InventorySlotToAdd.Quantity = 1;
-			
+
 			InventoryComponent->AddItem(InventorySlotToAdd);
-			/*if (GEngine)
+
+			// Call interface
+			if (PickupItem->GetClass()->ImplementsInterface(UItemInterface::StaticClass()))
 			{
-				GEngine->AddOnScreenDebugMessage(
-					-1,
-					5.f,
-					FColor::Cyan,
-					FString::Printf(
-						TEXT("Item: %s | Qty: %d"),
-						*InventorySlotToAdd.ItemData.ItemID.ToString(),
-						InventorySlotToAdd.Quantity));*/
-			
-				if (PickupItem->GetClass()->ImplementsInterface(UItemInterface::StaticClass()))
-				{
-					IItemInterface::Execute_OnPickup(PickupItem);
-				}
+				IItemInterface::Execute_OnPickup(PickupItem);
 			}
 		}
 	}
-
+}

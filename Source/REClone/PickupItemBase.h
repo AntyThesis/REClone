@@ -25,8 +25,8 @@ public:
 	UBoxComponent* BoxComponent;
 	
 	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FItemData ItemData;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FDataTableRowHandle ItemDataHandle;
 	
 
 protected:

@@ -41,7 +41,7 @@ struct FInventorySlot
 	GENERATED_BODY()
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="InventorySlotData")
-	FItemData ItemData;
+	FDataTableRowHandle RowHandle;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="InventorySlotData")
 	int Quantity;

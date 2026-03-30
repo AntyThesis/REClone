@@ -36,51 +36,44 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 // When "Add Item" is called
 void UInventoryComponent::AddItem(const FInventorySlot& InventorySlotToAdd)
 {
-	for (int32 i = 0; i < InventorySlots.Num(); i++)
+	for (auto& Slot : InventorySlots)
 	{
-		if (InventorySlots[i].ItemData.ItemID == InventorySlotToAdd.ItemData.ItemID)
+		if (Slot.RowHandle.RowName == InventorySlotToAdd.RowHandle.RowName)
 		{
-			InventorySlots[i].Quantity += InventorySlotToAdd.Quantity;
-			
-			if (InventorySlots[i].Quantity > InventorySlots[i].ItemData.MaxQuantity)
-			{
-				InventorySlots[i].Quantity = InventorySlots[i].ItemData.MaxQuantity;
-				OnItemAdded.Broadcast();
-				PrintInventory();
-				
-				
-			}
-			
+			const FItemData* Data = Slot.RowHandle.GetRow<FItemData>(TEXT("AddItem"));
+			if (!Data) return;
+
+			Slot.Quantity += InventorySlotToAdd.Quantity;
+			Slot.Quantity = FMath::Clamp(Slot.Quantity, 0, Data->MaxQuantity);
+
+			OnItemAdded.Broadcast();
 			PrintInventory();
 			return;
 		}
-		
 	}
+
 	InventorySlots.Add(InventorySlotToAdd);
 	OnItemAdded.Broadcast();
 	PrintInventory();
-	
 }
-
 
 // When "Remove item" is called
 void UInventoryComponent::RemoveItem(const FInventorySlot& InventorySlotToRemove)
 {
 	for (int32 i = 0; i < InventorySlots.Num(); i++)
 	{
-		if (InventorySlots[i].ItemData.ItemID == InventorySlotToRemove.ItemData.ItemID)
+		// Compare using RowHandle (identity)
+		if (InventorySlots[i].RowHandle.RowName == InventorySlotToRemove.RowHandle.RowName)
 		{
 			InventorySlots[i].Quantity -= InventorySlotToRemove.Quantity;
-		
-			
+
+			// Clamp to 0 minimum
 			if (InventorySlots[i].Quantity <= 0)
 			{
 				InventorySlots.RemoveAt(i);
-		
-				
 			}
+
 			OnItemRemoved.Broadcast();
-		
 			PrintInventory();
 			return;
 		}
@@ -91,14 +84,24 @@ void UInventoryComponent::PrintInventory()
 {
 	if (GEngine)
 	{
-		
 		for (int32 i = 0; i < InventorySlots.Num(); i++)
 		{
-			FString InventorySlotName = InventorySlots[i].ItemData.ItemID.ToString();
+			const FItemData* Data = InventorySlots[i].RowHandle.GetRow<FItemData>(TEXT("PrintInventory"));
+
+			if (!Data)
+			{
+				continue;
+			}
+
+			FString Name = Data->ItemID.ToString();
 			int32 Quantity = InventorySlots[i].Quantity;
-			
-			GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Yellow,
-				FString::Printf(TEXT(" %s,: %d\n"),*InventorySlotName, Quantity));
+
+			GEngine->AddOnScreenDebugMessage(
+				-1,
+				5.f,
+				FColor::Yellow,
+				FString::Printf(TEXT("Item: %s | Qty: %d"), *Name, Quantity)
+			);
 		}
 	}
 }
