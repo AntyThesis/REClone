@@ -38,7 +38,7 @@ void UInventoryComponent::AddItem(const FInventorySlot& InventorySlotToAdd)
 {
 	for (int32 i = 0; i < InventorySlots.Num(); i++)
 	{
-		if (InventorySlots[i].ItemData.ItemName.EqualTo(InventorySlotToAdd.ItemData.ItemName))
+		if (InventorySlots[i].ItemData.ItemID == InventorySlotToAdd.ItemData.ItemID)
 		{
 			InventorySlots[i].Quantity += InventorySlotToAdd.Quantity;
 			
@@ -46,13 +46,20 @@ void UInventoryComponent::AddItem(const FInventorySlot& InventorySlotToAdd)
 			{
 				InventorySlots[i].Quantity = InventorySlots[i].ItemData.MaxQuantity;
 				OnItemAdded.Broadcast();
+				PrintInventory();
+				
+				
 			}
+			
+			PrintInventory();
 			return;
 		}
 		
 	}
 	InventorySlots.Add(InventorySlotToAdd);
 	OnItemAdded.Broadcast();
+	PrintInventory();
+	
 }
 
 
@@ -61,7 +68,7 @@ void UInventoryComponent::RemoveItem(const FInventorySlot& InventorySlotToRemove
 {
 	for (int32 i = 0; i < InventorySlots.Num(); i++)
 	{
-		if (InventorySlots[i].ItemData.ItemName.EqualTo(InventorySlotToRemove.ItemData.ItemName))
+		if (InventorySlots[i].ItemData.ItemID == InventorySlotToRemove.ItemData.ItemID)
 		{
 			InventorySlots[i].Quantity -= InventorySlotToRemove.Quantity;
 		
@@ -69,10 +76,29 @@ void UInventoryComponent::RemoveItem(const FInventorySlot& InventorySlotToRemove
 			if (InventorySlots[i].Quantity <= 0)
 			{
 				InventorySlots.RemoveAt(i);
+		
 				
 			}
 			OnItemRemoved.Broadcast();
+		
+			PrintInventory();
 			return;
+		}
+	}
+}
+
+void UInventoryComponent::PrintInventory()
+{
+	if (GEngine)
+	{
+		
+		for (int32 i = 0; i < InventorySlots.Num(); i++)
+		{
+			FString InventorySlotName = InventorySlots[i].ItemData.ItemID.ToString();
+			int32 Quantity = InventorySlots[i].Quantity;
+			
+			GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Yellow,
+				FString::Printf(TEXT(" %s,: %d\n"),*InventorySlotName, Quantity));
 		}
 	}
 }

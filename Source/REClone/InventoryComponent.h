@@ -52,5 +52,8 @@ public:
 	UFUNCTION( BlueprintCallable )
 	void RemoveItem(const FInventorySlot& InventorySlotToRemove);
 
+	
+	UFUNCTION( BlueprintCallable )
+	void PrintInventory();
 		
 };

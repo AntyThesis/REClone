@@ -3,13 +3,18 @@
 
 #include "PickupItemBase.h"
 
+
+
 // Sets default values
 APickupItemBase::APickupItemBase()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	
+	
+	// Add static mesh component and box collision
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(FName("StaticMeshComponent"));
+	BoxComponent = CreateDefaultSubobject<UBoxComponent>(FName("BoxComponent"));
 
 }
 
@@ -27,8 +32,10 @@ void APickupItemBase::Tick(float DeltaTime)
 
 }
 
+
+// IItemInterface Event Implementation
 void APickupItemBase::OnPickup_Implementation()
 {
-	StaticMeshComponent->SetVisibility(false);
+	Destroy();
 }
 

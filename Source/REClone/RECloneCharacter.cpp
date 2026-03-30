@@ -75,7 +75,6 @@ void ARECloneCharacter::Interact()
 	
 	if (OverlappingActors.Num() > 0)
 	{
-		
 		if (APickupItemBase* PickupItem = Cast<APickupItemBase>(OverlappingActors[0]))
 		{
 			FInventorySlot InventorySlotToAdd;
@@ -84,12 +83,22 @@ void ARECloneCharacter::Interact()
 			InventorySlotToAdd.Quantity = 1;
 			
 			InventoryComponent->AddItem(InventorySlotToAdd);
-			
-			if (PickupItem->GetClass()->ImplementsInterface(UItemInterface::StaticClass()))
+			/*if (GEngine)
 			{
-				IItemInterface::Execute_OnPickup(PickupItem);
+				GEngine->AddOnScreenDebugMessage(
+					-1,
+					5.f,
+					FColor::Cyan,
+					FString::Printf(
+						TEXT("Item: %s | Qty: %d"),
+						*InventorySlotToAdd.ItemData.ItemID.ToString(),
+						InventorySlotToAdd.Quantity));*/
+			
+				if (PickupItem->GetClass()->ImplementsInterface(UItemInterface::StaticClass()))
+				{
+					IItemInterface::Execute_OnPickup(PickupItem);
+				}
 			}
 		}
 	}
-	
-}
+

@@ -5,6 +5,7 @@
 #include "ItemInterface.h"
 #include "ItemStructs.h"
 #include "CoreMinimal.h"
+#include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "PickupItemBase.generated.h"
 
@@ -20,6 +21,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UStaticMeshComponent* StaticMeshComponent;
 	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UBoxComponent* BoxComponent;
+	
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FItemData ItemData;
@@ -33,6 +37,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
+	
+	// IItemInterface override declaration
 	virtual void OnPickup_Implementation() override;
 
 };

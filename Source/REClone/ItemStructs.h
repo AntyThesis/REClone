@@ -7,13 +7,13 @@
 
 
 USTRUCT(BlueprintType)
-struct FItemData
+struct FItemData : public FTableRowBase
 {
 	GENERATED_BODY()
 	
 	// Name of the item
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
-	FText ItemName;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FName ItemID; 
 	
 	// Icon for the item
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
