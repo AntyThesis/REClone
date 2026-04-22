@@ -39,6 +39,6 @@ public:
 	
 	
 	// IItemInterface override declaration
-	virtual void OnPickup_Implementation() override;
+	virtual bool OnPickup_Implementation(AActor* Interactor) override;
 
 };

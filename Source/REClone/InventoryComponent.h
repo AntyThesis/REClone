@@ -46,7 +46,7 @@ public:
 	
 	// Function to add item to the list of inventory slots
 	UFUNCTION( BlueprintCallable )
-	void AddItem(const FInventorySlot& InventorySlotToAdd);
+	bool AddItem(const FInventorySlot& InventorySlotToAdd);
 	
 	// Function to remove item from the list of inventory slots
 	UFUNCTION( BlueprintCallable )

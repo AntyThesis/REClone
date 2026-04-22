@@ -24,6 +24,6 @@ class RECLONE_API IItemInterface
 public:
 	
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable,Category = "ItemInterface")
-	void OnPickup();
+	bool OnPickup(AActor* Interactor);
 	
 };

@@ -33,28 +33,66 @@ void UInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 }
 
 
-// When "Add Item" is called
-void UInventoryComponent::AddItem(const FInventorySlot& InventorySlotToAdd)
+bool UInventoryComponent::AddItem(const FInventorySlot& InventorySlotToAdd)
 {
+	const FItemData* Data = InventorySlotToAdd.RowHandle.GetRow<FItemData>(TEXT("AddItem"));
+	if (!Data) return false;
+
+	int32 RemainingQuantity = InventorySlotToAdd.Quantity;
+	bool bItemAdded = false;
+
+	// 🔥 STEP 1: Fill existing stacks
 	for (auto& Slot : InventorySlots)
 	{
 		if (Slot.RowHandle.RowName == InventorySlotToAdd.RowHandle.RowName)
 		{
-			const FItemData* Data = Slot.RowHandle.GetRow<FItemData>(TEXT("AddItem"));
-			if (!Data) return;
+			if (Slot.Quantity >= Data->MaxQuantity)
+			{
+				continue;
+			}
 
-			Slot.Quantity += InventorySlotToAdd.Quantity;
-			Slot.Quantity = FMath::Clamp(Slot.Quantity, 0, Data->MaxQuantity);
+			int32 SpaceLeft = Data->MaxQuantity - Slot.Quantity;
+			int32 AmountToAdd = FMath::Min(SpaceLeft, RemainingQuantity);
 
-			OnItemAdded.Broadcast();
-			PrintInventory();
-			return;
+			if (AmountToAdd > 0)
+			{
+				Slot.Quantity += AmountToAdd;
+				RemainingQuantity -= AmountToAdd;
+				bItemAdded = true;
+			}
+
+			if (RemainingQuantity <= 0)
+			{
+				OnItemAdded.Broadcast();
+				PrintInventory();
+				return true;
+			}
 		}
 	}
 
-	InventorySlots.Add(InventorySlotToAdd);
-	OnItemAdded.Broadcast();
-	PrintInventory();
+	// 🔥 STEP 2: Create new stacks if needed
+	while (RemainingQuantity > 0)
+	{
+		FInventorySlot NewSlot = InventorySlotToAdd;
+
+		int32 StackAmount = FMath::Min(Data->MaxQuantity, RemainingQuantity);
+
+		NewSlot.Quantity = StackAmount;
+		InventorySlots.Add(NewSlot);
+
+		RemainingQuantity -= StackAmount;
+		bItemAdded = true;
+	}
+
+	// 🔥 STEP 3: Only broadcast + success if something changed
+	if (bItemAdded)
+	{
+		OnItemAdded.Broadcast();
+		PrintInventory();
+		return true;
+	}
+
+	return false;
 }
 
 // When "Remove item" is called
