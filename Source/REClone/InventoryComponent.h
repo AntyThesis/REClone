@@ -32,6 +32,9 @@ public:
 	// Inventory
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TArray<FInventorySlot> InventorySlots;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	int32 SlotMaximum = 1;
 
 protected:
 	// Called when the game starts

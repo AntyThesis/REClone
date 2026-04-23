@@ -34,7 +34,7 @@ void APickupItemBase::Tick(float DeltaTime)
 
 
 // IItemInterface Event Implementation
-bool APickupItemBase::OnPickup_Implementation(AActor* Interactor)
+bool APickupItemBase::OnPickup_Implementation(ARECloneCharacter* Interactor)
 {
 	
 	Destroy();

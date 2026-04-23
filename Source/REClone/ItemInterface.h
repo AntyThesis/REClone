@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+#include "RECloneCharacter.h"
 #include "ItemInterface.generated.h"
 
 // This class does not need to be modified.
@@ -24,6 +25,6 @@ class RECLONE_API IItemInterface
 public:
 	
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable,Category = "ItemInterface")
-	bool OnPickup(AActor* Interactor);
+	bool OnPickup(ARECloneCharacter* Interactor);
 	
 };

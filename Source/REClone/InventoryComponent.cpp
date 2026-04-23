@@ -41,7 +41,7 @@ bool UInventoryComponent::AddItem(const FInventorySlot& InventorySlotToAdd)
 	int32 RemainingQuantity = InventorySlotToAdd.Quantity;
 	bool bItemAdded = false;
 
-	// 🔥 STEP 1: Fill existing stacks
+	// 🔥 STEP 1: Fill existing stacks (ALWAYS allowed)
 	for (auto& Slot : InventorySlots)
 	{
 		if (Slot.RowHandle.RowName == InventorySlotToAdd.RowHandle.RowName)
@@ -70,9 +70,15 @@ bool UInventoryComponent::AddItem(const FInventorySlot& InventorySlotToAdd)
 		}
 	}
 
-	// 🔥 STEP 2: Create new stacks if needed
+	// 🔥 STEP 2: Create new stacks ONLY if we have room
 	while (RemainingQuantity > 0)
 	{
+		if (InventorySlots.Num() >= SlotMaximum)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5, FColor::Black, "Inventory Full");
+			break; // stop trying to add new stacks
+		}
+
 		FInventorySlot NewSlot = InventorySlotToAdd;
 
 		int32 StackAmount = FMath::Min(Data->MaxQuantity, RemainingQuantity);
@@ -84,7 +90,7 @@ bool UInventoryComponent::AddItem(const FInventorySlot& InventorySlotToAdd)
 		bItemAdded = true;
 	}
 
-	// 🔥 STEP 3: Only broadcast + success if something changed
+	// 🔥 STEP 3: Only broadcast if something changed
 	if (bItemAdded)
 	{
 		OnItemAdded.Broadcast();
@@ -94,6 +100,7 @@ bool UInventoryComponent::AddItem(const FInventorySlot& InventorySlotToAdd)
 
 	return false;
 }
+
 
 // When "Remove item" is called
 void UInventoryComponent::RemoveItem(const FInventorySlot& InventorySlotToRemove)

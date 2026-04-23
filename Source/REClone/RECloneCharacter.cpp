@@ -92,12 +92,13 @@ void ARECloneCharacter::Interact()
 			InventorySlotToAdd.RowHandle = PickupItem->ItemDataHandle;
 			InventorySlotToAdd.Quantity = 1;
 
-			InventoryComponent->AddItem(InventorySlotToAdd);
-
-			// Call interface
-			if (PickupItem->GetClass()->ImplementsInterface(UItemInterface::StaticClass()))
+			if (InventoryComponent->AddItem(InventorySlotToAdd))
 			{
-				IItemInterface::Execute_OnPickup(PickupItem);
+				// Call interface
+				if (PickupItem->GetClass()->ImplementsInterface(UItemInterface::StaticClass()))
+				{
+					IItemInterface::Execute_OnPickup(PickupItem, this);
+				}
 			}
 		}
 	}

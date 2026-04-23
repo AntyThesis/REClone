@@ -3,7 +3,7 @@
 #pragma once
 
 #include "ItemInterface.h"
-#include "ItemStructs.h"
+#include "RECloneCharacter.h"
 #include "CoreMinimal.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
@@ -39,6 +39,6 @@ public:
 	
 	
 	// IItemInterface override declaration
-	virtual bool OnPickup_Implementation(AActor* Interactor) override;
+	virtual bool OnPickup_Implementation(ARECloneCharacter* Interactor) override;
 
 };
