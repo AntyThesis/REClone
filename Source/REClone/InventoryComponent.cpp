@@ -3,6 +3,7 @@
 
 #include "InventoryComponent.h"
 
+
 // Sets default values for this component's properties
 UInventoryComponent::UInventoryComponent()
 {
@@ -18,7 +19,8 @@ UInventoryComponent::UInventoryComponent()
 void UInventoryComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
+	ItemEffectSystem = Cast<UItemEffectSystem>(GetOwner()->GetComponentByClass(UItemEffectSystem::StaticClass()));
 	// ...
 	
 }
@@ -103,14 +105,14 @@ bool UInventoryComponent::AddItem(const FInventorySlot& InventorySlotToAdd)
 
 
 // When "Remove item" is called
-void UInventoryComponent::RemoveItem(const FInventorySlot& InventorySlotToRemove)
+bool UInventoryComponent::RemoveItem(FDataTableRowHandle RowHandle, int Quantity)
 {
 	for (int32 i = 0; i < InventorySlots.Num(); i++)
 	{
 		// Compare using RowHandle (identity)
-		if (InventorySlots[i].RowHandle.RowName == InventorySlotToRemove.RowHandle.RowName)
+		if (InventorySlots[i].RowHandle.RowName == RowHandle.RowName)
 		{
-			InventorySlots[i].Quantity -= InventorySlotToRemove.Quantity;
+			InventorySlots[i].Quantity -= Quantity;
 
 			// Clamp to 0 minimum
 			if (InventorySlots[i].Quantity <= 0)
@@ -120,9 +122,10 @@ void UInventoryComponent::RemoveItem(const FInventorySlot& InventorySlotToRemove
 
 			OnItemRemoved.Broadcast();
 			PrintInventory();
-			return;
+			return true;
 		}
 	}
+	return false;
 }
 
 void UInventoryComponent::PrintInventory()
@@ -150,4 +153,29 @@ void UInventoryComponent::PrintInventory()
 		}
 	}
 }
+
+bool UInventoryComponent::RequestUse(const FInventorySlot& InventorySlotToRequest)
+{
+	if (!ItemEffectSystem)
+	{
+		return false;
+	}
+	
+	const FItemData* Data = InventorySlotToRequest.RowHandle.GetRow<FItemData>(TEXT("GetData"));
+	
+	if (!Data)
+	{
+		return false;
+	}
+	
+	
+	if (ItemEffectSystem->UseItem( Data->EffectType, Data->EffectValue))
+	{
+		RemoveItem(InventorySlotToRequest);
+		return true;
+	}
+		return false;
+}
+
+
 

@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "ItemEffectSystem.h"
 #include "ItemStructs.h"
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
@@ -19,6 +20,9 @@ class RECLONE_API UInventoryComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UInventoryComponent();
+	
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UItemEffectSystem* ItemEffectSystem;
 	
 	// Delegate for "Adding an item"
 	UPROPERTY(BlueprintAssignable)
@@ -53,8 +57,11 @@ public:
 	
 	// Function to remove item from the list of inventory slots
 	UFUNCTION( BlueprintCallable )
-	void RemoveItem(const FInventorySlot& InventorySlotToRemove);
+	bool RemoveItem(const FDataTableRowHandle RowHandle, const int QuantityToRemove);
 
+	
+	UFUNCTION( BlueprintCallable )
+	bool RequestUse(const FInventorySlot& InventorySlotToRequest);
 	
 	UFUNCTION( BlueprintCallable )
 	void PrintInventory();

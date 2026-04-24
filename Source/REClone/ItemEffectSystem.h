@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ItemEnums.h"
 #include "Components/ActorComponent.h"
 #include "ItemEffectSystem.generated.h"
 
@@ -15,6 +16,12 @@ class RECLONE_API UItemEffectSystem : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UItemEffectSystem();
+	
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	EEffectType EffectType;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	float EffectValue = 0;
 
 protected:
 	// Called when the game starts
@@ -24,5 +31,5 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+	bool UseItem(const EEffectType EffectType,const float EffectValue);
 };
