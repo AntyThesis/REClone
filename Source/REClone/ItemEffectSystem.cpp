@@ -18,6 +18,8 @@ UItemEffectSystem::UItemEffectSystem()
 void UItemEffectSystem::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	HealthComponent = Cast<UHealthComponent>(GetOwner()->FindComponentByClass(UHealthComponent::StaticClass()));
 
 	// ...
 	
@@ -31,4 +33,35 @@ void UItemEffectSystem::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 
 	// ...
 }
+bool UItemEffectSystem::UseItem(const EEffectType EffectTypeToUse, const float EffectValueToUse)
+{
+	
+	
+	switch (EffectTypeToUse)
+	{
+	case EEffectType::Heal:
+		if (HealthComponent)
+		{
+			GEngine->AddOnScreenDebugMessage(-1,5.f, FColor::Green,"Heal Item Used");
+			HealthComponent->AffectHealth(EffectValueToUse);
+			return true;
+		}
+		break;
+	
+	case EEffectType::EquipWeapon:
+		GEngine->AddOnScreenDebugMessage(-1,5.f, FColor::Green,"Weapon Item Used");
+		break;
+		
+	case EEffectType::Unlock:
+		GEngine->AddOnScreenDebugMessage(-1,5.f, FColor::Green,"Key Item Used");
+		break;
+		
+	default:
+		break;
+	}
+	return false;
+}
+
+
+
 

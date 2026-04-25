@@ -3,6 +3,8 @@
 #pragma once
 
 #include "InventoryComponent.h"
+#include "HealthComponent.h"
+#include "ItemEffectSystem.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "RECloneCharacter.generated.h"
@@ -15,9 +17,16 @@ class ARECloneCharacter : public ACharacter
 public:
 	ARECloneCharacter();
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta = (AllowPrivateAccess = "true"))
 	UInventoryComponent* InventoryComponent;
-
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta = (AllowPrivateAccess = "true"))
+	UHealthComponent* HealthComponent;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta = (AllowPrivateAccess = "true"))
+	UItemEffectSystem* ItemEffectSystem;
+	
+	
 	// Called every frame.
 	virtual void Tick(float DeltaSeconds) override;
 

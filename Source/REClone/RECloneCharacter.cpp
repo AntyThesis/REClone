@@ -50,6 +50,8 @@ ARECloneCharacter::ARECloneCharacter()
 	PrimaryActorTick.bStartWithTickEnabled = true;
 	
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(FName("Inventory Component"));
+	HealthComponent = CreateDefaultSubobject<UHealthComponent>(FName("Health Component"));
+	ItemEffectSystem = CreateDefaultSubobject<UItemEffectSystem>(FName("Item Effect System"));
 }
 
 void ARECloneCharacter::Tick(float DeltaSeconds)

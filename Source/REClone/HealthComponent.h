@@ -3,29 +3,29 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "ItemEnums.h"
 #include "Components/ActorComponent.h"
-#include "HealthComponent.h"
-#include "ItemEffectSystem.generated.h"
+#include "HealthComponent.generated.h"
 
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHealthChanged);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class RECLONE_API UItemEffectSystem : public UActorComponent
+class RECLONE_API UHealthComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
 	// Sets default values for this component's properties
-	UItemEffectSystem();
+	UHealthComponent();
 	
-	UPROPERTY()
-	UHealthComponent* HealthComponent;
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	float MaxHealth;
 	
-	UPROPERTY(BlueprintReadOnly)
-	EEffectType EffectType;
+	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
+	float CurrentHealth;
 	
-	UPROPERTY(BlueprintReadOnly)
-	float EffectValue = 0;
+	UPROPERTY(BlueprintAssignable)
+	FOnHealthChanged OnHealthChanged;
 
 protected:
 	// Called when the game starts
@@ -35,5 +35,5 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	bool UseItem(const EEffectType EffectTypeToUse,const float EffectValueToUse);
+	void AffectHealth(const float HealthChangeAmount);
 };

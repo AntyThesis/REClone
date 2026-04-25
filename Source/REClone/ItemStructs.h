@@ -45,6 +45,4 @@ struct FInventorySlot
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="InventorySlotData")
 	int Quantity;
-	
-	
 };

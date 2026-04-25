@@ -158,6 +158,10 @@ bool UInventoryComponent::RequestUse(const FInventorySlot& InventorySlotToReques
 {
 	if (!ItemEffectSystem)
 	{
+		GEngine->AddOnScreenDebugMessage(
+				-1,
+				5.f,
+				FColor::Red,"No ItemEffectSystem found");
 		return false;
 	}
 	
@@ -165,15 +169,23 @@ bool UInventoryComponent::RequestUse(const FInventorySlot& InventorySlotToReques
 	
 	if (!Data)
 	{
+		GEngine->AddOnScreenDebugMessage(
+				-1,
+				5.f,
+				FColor::Red,"No Data found");
 		return false;
 	}
 	
 	
 	if (ItemEffectSystem->UseItem( Data->EffectType, Data->EffectValue))
 	{
-		RemoveItem(InventorySlotToRequest);
+		RemoveItem(InventorySlotToRequest.RowHandle, InventorySlotToRequest.Quantity);
 		return true;
 	}
+	GEngine->AddOnScreenDebugMessage(
+				-1,
+				5.f,
+				FColor::Red,"Use Item failed");
 		return false;
 }
 
