@@ -2,12 +2,16 @@
 
 #pragma once
 
+#include "ItemStructs.h"
 #include "ItemInterface.h"
 #include "RECloneCharacter.h"
 #include "CoreMinimal.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/Actor.h"
 #include "PickupItemBase.generated.h"
+
+
+
 
 UCLASS()
 class RECLONE_API APickupItemBase : public AActor, public IItemInterface
@@ -26,7 +30,7 @@ public:
 	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FDataTableRowHandle ItemDataHandle;
+	FInventorySlot SlotData;
 	
 
 protected:

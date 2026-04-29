@@ -103,9 +103,23 @@ bool UInventoryComponent::AddItem(const FInventorySlot& InventorySlotToAdd)
 	return false;
 }
 
+bool UInventoryComponent::HasBullets() const
+{
+	static const FName BulletsName ("Bullets");
+	
+	for (auto& Slot : InventorySlots)
+	{
+		if (Slot.RowHandle.RowName == BulletsName)
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 
 // When "Remove item" is called
-bool UInventoryComponent::RemoveItem(FDataTableRowHandle RowHandle, int Quantity)
+bool UInventoryComponent::RemoveItem(const FDataTableRowHandle& RowHandle, int32 Quantity)
 {
 	for (int32 i = 0; i < InventorySlots.Num(); i++)
 	{
@@ -179,8 +193,15 @@ bool UInventoryComponent::RequestUse(const FInventorySlot& InventorySlotToReques
 	
 	if (ItemEffectSystem->UseItem( Data->EffectType, Data->EffectValue))
 	{
-		RemoveItem(InventorySlotToRequest.RowHandle, InventorySlotToRequest.Quantity);
-		return true;
+		if (InventorySlotToRequest.RowHandle.GetRow<FItemData>(TEXT("GetData"))->EffectType != EEffectType::NoEffect)
+		{		
+			RemoveItem(InventorySlotToRequest.RowHandle, InventorySlotToRequest.Quantity);
+			return true;
+		}
+		if (InventorySlotToRequest.RowHandle.GetRow<FItemData>(TEXT("GetData"))->EffectType == EEffectType::NoEffect)
+		{
+			return true; 
+		}
 	}
 	GEngine->AddOnScreenDebugMessage(
 				-1,

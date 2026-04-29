@@ -7,7 +7,9 @@
 #include "PickupItemBase.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Camera/CameraComponent.h"
-#include "Components/DecalComponent.h"
+#include "WeaponSystem.h"
+#include "HealthComponent.h"
+#include "InventoryComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PlayerController.h"
@@ -63,9 +65,10 @@ void ARECloneCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &ARECloneCharacter::Interact);
+	PlayerInputComponent->BindAction("Fire Weapon",IE_Pressed,this, &ARECloneCharacter::FireWeaponRequest);
 }
 
-void ARECloneCharacter::Interact()
+ void ARECloneCharacter::Interact()
 {
 	TArray<AActor*> OverlappingActors;
 
@@ -91,8 +94,8 @@ void ARECloneCharacter::Interact()
 			FInventorySlot InventorySlotToAdd;
 
 			// ✅ Use RowHandle instead of ItemData
-			InventorySlotToAdd.RowHandle = PickupItem->ItemDataHandle;
-			InventorySlotToAdd.Quantity = 1;
+			InventorySlotToAdd.RowHandle = PickupItem->SlotData.RowHandle;
+			InventorySlotToAdd.Quantity = PickupItem->SlotData.Quantity;
 
 			if (InventoryComponent->AddItem(InventorySlotToAdd))
 			{
@@ -103,5 +106,36 @@ void ARECloneCharacter::Interact()
 				}
 			}
 		}
+	}
+}
+
+void ARECloneCharacter::FireWeaponRequest()
+{
+	
+	
+	if (UWeaponSystem* WeaponSystem = GetComponentByClass<UWeaponSystem>())
+	{
+		if (!InventoryComponent->HasBullets())
+		{
+			GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Red,"No bullets in inventory");
+		}
+		else
+		{
+			WeaponSystem->FireWeapon();
+		}
+	
+	}
+	
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Red,"No weapon equipped");
+	}
+}
+
+void ARECloneCharacter::AffectAmmo(const FDataTableRowHandle& BulletsToRemove,const int Amount) const
+{
+	if (InventoryComponent)
+	{
+		InventoryComponent->RemoveItem(BulletsToRemove,Amount);
 	}
 }

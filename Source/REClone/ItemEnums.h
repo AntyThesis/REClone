@@ -12,5 +12,6 @@ enum class EEffectType : uint8
 	Heal UMETA(DisplayName = "Heal"),
 	EquipWeapon UMETA(DisplayName = "EquipWeapon"),
 	Unlock UMETA(DisplayName = "Unlock"),
+	NoEffect UMETA(DisplayName = "NoEffect")
 	
 };

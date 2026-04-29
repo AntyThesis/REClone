@@ -2,12 +2,16 @@
 
 #pragma once
 
-#include "InventoryComponent.h"
-#include "HealthComponent.h"
-#include "ItemEffectSystem.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "RECloneCharacter.generated.h"
+
+
+class UInventoryComponent;
+class UWeaponSystem;
+class UHealthComponent;
+class UItemEffectSystem;
+
 
 UCLASS(Blueprintable)
 class ARECloneCharacter : public ACharacter
@@ -17,14 +21,18 @@ class ARECloneCharacter : public ACharacter
 public:
 	ARECloneCharacter();
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components)
 	UInventoryComponent* InventoryComponent;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components)
 	UHealthComponent* HealthComponent;
 	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components)
 	UItemEffectSystem* ItemEffectSystem;
+	
+
+	
+	
 	
 	
 	// Called every frame.
@@ -37,7 +45,11 @@ public:
 	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
-	void Interact();
+	 void Interact();
+	
+	void FireWeaponRequest();
+	
+	void AffectAmmo(const FDataTableRowHandle& BulletsToRemove,const int Amount) const;
 
 
 private:

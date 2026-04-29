@@ -35,5 +35,5 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	bool UseItem(const EEffectType EffectTypeToUse,const float EffectValueToUse);
+	bool UseItem(const EEffectType EffectTypeToUse,const float EffectValueToUse) const;
 };

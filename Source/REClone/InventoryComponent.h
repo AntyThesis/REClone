@@ -55,9 +55,13 @@ public:
 	UFUNCTION( BlueprintCallable )
 	bool AddItem(const FInventorySlot& InventorySlotToAdd);
 	
+	
+	UFUNCTION(BlueprintCallable)
+	bool HasBullets() const;
+	
 	// Function to remove item from the list of inventory slots
 	UFUNCTION( BlueprintCallable )
-	bool RemoveItem(const FDataTableRowHandle RowHandle, const int QuantityToRemove);
+	bool RemoveItem(const FDataTableRowHandle& RowHandle, const int QuantityToRemove);
 
 	
 	UFUNCTION( BlueprintCallable )

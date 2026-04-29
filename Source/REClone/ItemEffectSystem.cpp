@@ -33,7 +33,7 @@ void UItemEffectSystem::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 
 	// ...
 }
-bool UItemEffectSystem::UseItem(const EEffectType EffectTypeToUse, const float EffectValueToUse)
+bool UItemEffectSystem::UseItem(const EEffectType EffectTypeToUse, const float EffectValueToUse) const
 {
 	
 	
@@ -50,10 +50,16 @@ bool UItemEffectSystem::UseItem(const EEffectType EffectTypeToUse, const float E
 	
 	case EEffectType::EquipWeapon:
 		GEngine->AddOnScreenDebugMessage(-1,5.f, FColor::Green,"Weapon Item Used");
+		return true;
 		break;
 		
 	case EEffectType::Unlock:
 		GEngine->AddOnScreenDebugMessage(-1,5.f, FColor::Green,"Key Item Used");
+		return true;
+		break;
+		
+	case EEffectType::NoEffect:
+		return true;
 		break;
 		
 	default:
