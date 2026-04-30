@@ -8,6 +8,8 @@
 #include "HealthComponent.h"
 #include "ItemEffectSystem.generated.h"
 
+class ARECloneCharacter;
+
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class RECLONE_API UItemEffectSystem : public UActorComponent
@@ -20,6 +22,9 @@ public:
 	
 	UPROPERTY()
 	UHealthComponent* HealthComponent;
+	
+	UPROPERTY()
+	ARECloneCharacter* OwningCharacter;
 	
 	UPROPERTY(BlueprintReadOnly)
 	EEffectType EffectType;

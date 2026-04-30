@@ -1,8 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "RECloneCharacter.h"
-
-
 #include "ItemInterface.h"
 #include "PickupItemBase.h"
 #include "UObject/ConstructorHelpers.h"
@@ -68,7 +66,19 @@ void ARECloneCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 	PlayerInputComponent->BindAction("Fire Weapon",IE_Pressed,this, &ARECloneCharacter::FireWeaponRequest);
 }
 
- void ARECloneCharacter::Interact()
+bool ARECloneCharacter::EquipWeapon() 
+{
+	WeaponSystem = Cast<UWeaponSystem>(AddComponentByClass(UWeaponSystem::StaticClass(), false,FTransform::Identity,false));
+	
+	if ( WeaponSystem)
+	{
+		GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Emerald,"Weapon Equipped");
+		return true;
+	}
+	return false;
+}
+
+void ARECloneCharacter::Interact()
 {
 	TArray<AActor*> OverlappingActors;
 
@@ -113,7 +123,7 @@ void ARECloneCharacter::FireWeaponRequest()
 {
 	
 	
-	if (UWeaponSystem* WeaponSystem = GetComponentByClass<UWeaponSystem>())
+	if (WeaponSystem != nullptr)
 	{
 		if (!InventoryComponent->HasBullets())
 		{

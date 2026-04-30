@@ -30,6 +30,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components)
 	UItemEffectSystem* ItemEffectSystem;
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components)
+	UWeaponSystem* WeaponSystem;
+	
 
 	
 	
@@ -45,7 +48,9 @@ public:
 	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
-	 void Interact();
+	bool EquipWeapon();
+	
+	void Interact();
 	
 	void FireWeaponRequest();
 	

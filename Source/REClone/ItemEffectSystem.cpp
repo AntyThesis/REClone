@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "RECloneCharacter.h"
 #include "ItemEffectSystem.h"
 
 // Sets default values for this component's properties
@@ -19,7 +19,8 @@ void UItemEffectSystem::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	HealthComponent = Cast<UHealthComponent>(GetOwner()->FindComponentByClass(UHealthComponent::StaticClass()));
+	OwningCharacter = Cast<ARECloneCharacter>(GetOwner());
+	HealthComponent = Cast<UHealthComponent>(OwningCharacter->FindComponentByClass(UHealthComponent::StaticClass()));
 
 	// ...
 	
@@ -42,15 +43,28 @@ bool UItemEffectSystem::UseItem(const EEffectType EffectTypeToUse, const float E
 	case EEffectType::Heal:
 		if (HealthComponent)
 		{
-			GEngine->AddOnScreenDebugMessage(-1,5.f, FColor::Green,"Heal Item Used");
-			HealthComponent->AffectHealth(EffectValueToUse);
-			return true;
+			if (HealthComponent->AffectHealth(EffectValueToUse))
+			{
+				GEngine->AddOnScreenDebugMessage(-1,5.f, FColor::Green,"Heal Item Used");
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 		break;
 	
 	case EEffectType::EquipWeapon:
 		GEngine->AddOnScreenDebugMessage(-1,5.f, FColor::Green,"Weapon Item Used");
-		return true;
+		if (OwningCharacter->EquipWeapon())
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 		break;
 		
 	case EEffectType::Unlock:
