@@ -1,7 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "RECloneCharacter.h"
-#include "ItemInterface.h"
 #include "PickupItemBase.h"
 #include "UObject/ConstructorHelpers.h"
 #include "Camera/CameraComponent.h"

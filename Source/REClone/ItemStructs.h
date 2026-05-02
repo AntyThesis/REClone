@@ -23,6 +23,9 @@ struct FItemData : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	UStaticMesh* ItemMesh;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
+	UMaterial* ItemMaterial;
+	
 	// Effect type from enum
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	EEffectType EffectType;

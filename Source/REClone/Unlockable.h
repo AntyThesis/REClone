@@ -2,29 +2,35 @@
 
 #pragma once
 
-#include "GameFramework/ProjectileMovementComponent.h"
 #include "CoreMinimal.h"
+#include "ItemInterface.h"
 #include "GameFramework/Actor.h"
-#include "GunProjectile.generated.h"
+#include "Unlockable.generated.h"
+
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnUnlocked);
 
 UCLASS()
-class RECLONE_API AGunProjectile : public AActor
+class RECLONE_API AUnlockable : public AActor, public IItemInterface
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	AGunProjectile();
+	AUnlockable();
 	
+	UPROPERTY(BlueprintAssignable)
+	FOnUnlocked OnUnlocked;
 	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Mesh")
+	UPROPERTY(BlueprintReadWrite,EditAnywhere, Category = "Mesh")
 	UStaticMeshComponent* Mesh;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Mesh")
-	UProjectileMovementComponent* ProjectileMovement;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+	
+	UFUNCTION()
+	virtual bool OnUnlock_Implementation(ARECloneCharacter* UnlockingCharacter) override;
 
 public:	
 	// Called every frame

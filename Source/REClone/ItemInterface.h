@@ -27,4 +27,7 @@ public:
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable,Category = "ItemInterface")
 	bool OnPickup(ARECloneCharacter* Interactor);
 	
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable,Category = "ItemInterface")
+	bool OnUnlock(ARECloneCharacter* UnlockingCharacter);
+	
 };

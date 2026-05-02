@@ -119,14 +119,14 @@ bool UInventoryComponent::HasBullets() const
 
 
 // When "Remove item" is called
-bool UInventoryComponent::RemoveItem(const FDataTableRowHandle& RowHandle, int32 Quantity)
+bool UInventoryComponent::RemoveItem(const FDataTableRowHandle& RowHandle,const int32 QuantityToRemove)
 {
 	for (int32 i = 0; i < InventorySlots.Num(); i++)
 	{
 		// Compare using RowHandle (identity)
 		if (InventorySlots[i].RowHandle.RowName == RowHandle.RowName)
 		{
-			InventorySlots[i].Quantity -= Quantity;
+			InventorySlots[i].Quantity -= QuantityToRemove;
 
 			// Clamp to 0 minimum
 			if (InventorySlots[i].Quantity <= 0)
@@ -172,43 +172,31 @@ bool UInventoryComponent::RequestUse(const FInventorySlot& InventorySlotToReques
 {
 	if (!ItemEffectSystem)
 	{
-		GEngine->AddOnScreenDebugMessage(
-				-1,
-				5.f,
-				FColor::Red,"No ItemEffectSystem found");
+		GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Red,"No ItemEffectSystem found");
 		return false;
 	}
-	
+
 	const FItemData* Data = InventorySlotToRequest.RowHandle.GetRow<FItemData>(TEXT("GetData"));
-	
+
 	if (!Data)
 	{
-		GEngine->AddOnScreenDebugMessage(
-				-1,
-				5.f,
-				FColor::Red,"No Data found");
+		GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Red,"No Data found");
 		return false;
 	}
-	
-	
-	if (ItemEffectSystem->UseItem( Data->EffectType, Data->EffectValue))
+
+	const bool bUsed = ItemEffectSystem->UseItem(Data->EffectType, Data->EffectValue);
+
+	if (!bUsed)
 	{
-		if (InventorySlotToRequest.RowHandle.GetRow<FItemData>(TEXT("GetData"))->EffectType != EEffectType::NoEffect)
-		{		
-			RemoveItem(InventorySlotToRequest.RowHandle, InventorySlotToRequest.Quantity);
-			return true;
-		}
-		if (InventorySlotToRequest.RowHandle.GetRow<FItemData>(TEXT("GetData"))->EffectType == EEffectType::NoEffect)
-		{
-			return true; 
-		}
-	}
-	GEngine->AddOnScreenDebugMessage(
-				-1,
-				5.f,
-				FColor::Red,"Use Item failed");
+		GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Red,"Use Item failed");
 		return false;
+	}
+
+	// If item has gameplay effect → consume it
+	if (Data->EffectType != EEffectType::NoEffect)
+	{
+		RemoveItem(InventorySlotToRequest.RowHandle, InventorySlotToRequest.Quantity);
+	}
+
+	return true;
 }
-
-
-
