@@ -3,6 +3,7 @@
 
 #include "WeaponSystem.h"
 #include "RECloneCharacter.h"
+#include "GunProjectile.h"
 
 
 // Sets default values for this component's properties
@@ -46,7 +47,18 @@ void UWeaponSystem::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 
 void UWeaponSystem::FireWeapon()
 {
+	FActorSpawnParameters Params;
+	Params.Owner = GetOwner();
+	Params.Instigator = Cast<APawn>(GetOwner());
+
+	GetWorld()->SpawnActor<AGunProjectile>(
+		ProjectileClass,
+		GetOwner()->GetActorLocation(),
+		GetOwner()->GetActorRotation(),
+		Params
+	);
 	GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Black,"Weapon fired");
+
 	RequestAffectAmmo(AmmoItemRow,1);
 }
 

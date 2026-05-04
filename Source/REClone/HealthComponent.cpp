@@ -37,7 +37,7 @@ void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 bool UHealthComponent::AffectHealth(const float HealthChangeAmount)
 {
-	if (CurrentHealth < MaxHealth)
+	if (CurrentHealth < MaxHealth || HealthChangeAmount < 0.0f)
 	{	
 		
 		CurrentHealth += HealthChangeAmount;
@@ -56,8 +56,11 @@ bool UHealthComponent::AffectHealth(const float HealthChangeAmount)
 		OnHealthChanged.Broadcast();
 		return true;
 	}
-	
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black,"Health is already full");
+	if (CurrentHealth >= MaxHealth && HealthChangeAmount > 0.0f)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black,"Health is already full");
+		return false;
+	}
 	return false;
 }
 

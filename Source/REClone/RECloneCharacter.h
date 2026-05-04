@@ -2,7 +2,9 @@
 
 #pragma once
 
+#include "GunProjectile.h"
 #include "CoreMinimal.h"
+#include "HealthInterface.h"
 #include "GameFramework/Character.h"
 #include "RECloneCharacter.generated.h"
 
@@ -13,8 +15,9 @@ class UHealthComponent;
 class UItemEffectSystem;
 
 
+
 UCLASS(Blueprintable)
-class ARECloneCharacter : public ACharacter
+class ARECloneCharacter : public ACharacter, public IHealthInterface
 {
 	GENERATED_BODY()
 
@@ -32,6 +35,9 @@ public:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components)
 	UWeaponSystem* WeaponSystem;
+	
+	UPROPERTY(EditDefaultsOnly, Category="Weapon")
+	TSubclassOf<AGunProjectile> ProjectileInClass;
 	
 
 	
@@ -55,6 +61,8 @@ public:
 	void FireWeaponRequest();
 	
 	void AffectAmmo(const FDataTableRowHandle& BulletsToRemove,const int Amount) const;
+	
+	virtual void ApplyHealthChange_Implementation(const float ChangeAmount) override;
 
 
 private:
@@ -65,5 +73,7 @@ private:
 	/** Camera boom positioning the camera above the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	class USpringArmComponent* CameraBoom;
+	
+	
 };
 

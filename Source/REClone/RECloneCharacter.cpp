@@ -71,6 +71,7 @@ bool ARECloneCharacter::EquipWeapon()
 	
 	if ( WeaponSystem)
 	{
+		WeaponSystem->ProjectileClass = ProjectileInClass;
 		GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Emerald,"Weapon Equipped");
 		return true;
 	}
@@ -147,4 +148,18 @@ void ARECloneCharacter::AffectAmmo(const FDataTableRowHandle& BulletsToRemove,co
 	{
 		InventoryComponent->RemoveItem(BulletsToRemove,Amount);
 	}
+}
+
+void ARECloneCharacter::ApplyHealthChange_Implementation(const float ChangeAmount)
+{
+	if (HealthComponent)
+	{
+		HealthComponent->AffectHealth(ChangeAmount);
+		GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Green,"Damage Applied");
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Green,"No Health Component found");
+	}
+	
 }

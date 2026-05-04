@@ -4,12 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "RECloneCharacter.h"
-#include "ItemInterface.generated.h"
+#include "HealthInterface.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
-class UItemInterface : public UInterface
+class UHealthInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -17,17 +16,13 @@ class UItemInterface : public UInterface
 /**
  * 
  */
-class RECLONE_API IItemInterface
+class RECLONE_API IHealthInterface
 {
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	
-	UFUNCTION(BlueprintNativeEvent,Category = "ItemInterface")
-	bool OnPickup(ARECloneCharacter* Interactor);
-	
-	UFUNCTION(BlueprintNativeEvent,Category = "ItemInterface")
-	bool OnUnlock(ARECloneCharacter* UnlockingCharacter);
-	
+	UFUNCTION(BlueprintNativeEvent, Category = "Health Interface")
+	void ApplyHealthChange(const float ChangeAmount);
 };
