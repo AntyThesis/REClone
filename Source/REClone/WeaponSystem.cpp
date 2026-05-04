@@ -54,7 +54,7 @@ void UWeaponSystem::FireWeapon()
 	GetWorld()->SpawnActor<AGunProjectile>(
 		ProjectileClass,
 		 GetOwner()->GetActorLocation() + 
-		 GetOwner()->GetActorForwardVector() * 50.f,
+		 GetOwner()->GetActorForwardVector() * 75.f,
 		GetOwner()->GetActorRotation(),
 		Params
 	);
