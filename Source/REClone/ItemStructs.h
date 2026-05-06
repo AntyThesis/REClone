@@ -12,7 +12,7 @@ struct FItemData : public FTableRowBase
 	GENERATED_BODY()
 	
 	// Name of the item
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	FName ItemID; 
 	
 	// Icon for the item
