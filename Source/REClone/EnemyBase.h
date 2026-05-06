@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "EnemyStructs.h"
 #include "EnemyBase.generated.h"
+
+class UHealthComponent;
 
 UCLASS()
 class RECLONE_API AEnemyBase : public ACharacter
@@ -14,6 +17,14 @@ class RECLONE_API AEnemyBase : public ACharacter
 public:
 	// Sets default values for this character's properties
 	AEnemyBase();
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Stats")
+	FEnemyIdentity Identity;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UHealthComponent* HealthComponent;
+	
+	
 
 protected:
 	// Called when the game starts or when spawned
@@ -25,5 +36,7 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+	virtual void SetHealth();
 
 };

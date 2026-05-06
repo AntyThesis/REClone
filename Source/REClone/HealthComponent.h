@@ -18,7 +18,7 @@ public:
 	// Sets default values for this component's properties
 	UHealthComponent();
 	
-	UPROPERTY(BlueprintReadOnly, VisibleAnywhere)
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	float MaxHealth;
 	
 	UPROPERTY(BlueprintReadWrite, VisibleAnywhere)
@@ -35,5 +35,6 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	UFUNCTION(BlueprintCallable)
 	bool AffectHealth(const float HealthChangeAmount);
 };
