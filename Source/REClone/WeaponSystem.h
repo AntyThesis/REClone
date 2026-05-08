@@ -10,6 +10,8 @@ class UInventoryComponent;
 class ARECloneCharacter;
 class AGunProjectile;
 
+
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class RECLONE_API UWeaponSystem : public UActorComponent
 {
@@ -27,6 +29,8 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Weapon")
 	TSubclassOf<AGunProjectile> ProjectileClass;
+	
+
 	
 	
 

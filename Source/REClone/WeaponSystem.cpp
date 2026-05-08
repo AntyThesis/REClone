@@ -31,6 +31,8 @@ void UWeaponSystem::BeginPlay()
 	Super::BeginPlay();
 	
 	OwningCharacter = Cast<ARECloneCharacter>(this->GetOwner());
+	
+
 
 	// ...
 	

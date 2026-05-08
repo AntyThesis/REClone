@@ -52,9 +52,10 @@ ARECloneCharacter::ARECloneCharacter()
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(FName("Inventory Component"));
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(FName("Health Component"));
 	ItemEffectSystem = CreateDefaultSubobject<UItemEffectSystem>(FName("Item Effect System"));
-	FlashlightComponent = CreateDefaultSubobject<USpotLightComponent>(FName("Flashlight Component"));
+	Flashlight = CreateDefaultSubobject<USpotLightComponent>(FName("Flashlight Component"));
 	
-	FlashlightComponent->SetupAttachment(RootComponent);
+	Flashlight->SetupAttachment(RootComponent);
+	Flashlight->SetVisibility(false);
 }
 
 void ARECloneCharacter::Tick(float DeltaSeconds)
@@ -67,6 +68,7 @@ void ARECloneCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &ARECloneCharacter::Interact);
 	PlayerInputComponent->BindAction("Fire Weapon",IE_Pressed,this, &ARECloneCharacter::FireWeaponRequest);
+	PlayerInputComponent->BindAction("ToggleFlashlight",IE_Pressed,this, &ARECloneCharacter::ToggleFlashlight);
 }
 
 bool ARECloneCharacter::EquipWeapon() 
@@ -77,9 +79,39 @@ bool ARECloneCharacter::EquipWeapon()
 	{
 		WeaponSystem->ProjectileClass = ProjectileInClass;
 		GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Emerald,"Weapon Equipped");
+		OnEquip.Broadcast();
 		return true;
 	}
 	return false;
+}
+
+void ARECloneCharacter::EquipFlashlight()
+{
+	FlashlightEquipped = true;
+	OnFlashlightEquipped.Broadcast();
+	
+}
+
+void ARECloneCharacter::ToggleFlashlight()
+{
+	if (FlashlightEquipped)
+	{
+		if (Flashlight->GetVisibleFlag() == false)
+		{
+			Flashlight->SetVisibility(true);
+			OnLightToggle.Broadcast();
+		}
+		else
+		{
+			Flashlight->SetVisibility(false);
+			OnLightToggle.Broadcast();
+		}
+	
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Red,"Flashlight not equipped");
+	}
 }
 
 void ARECloneCharacter::Interact()

@@ -15,7 +15,9 @@ class UHealthComponent;
 class UItemEffectSystem;
 class USpotLightComponent;
 
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnFlashlightEquipped);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnEquip);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnLightToggle);
 
 UCLASS(Blueprintable)
 class ARECloneCharacter : public ACharacter, public IHealthInterface
@@ -38,7 +40,18 @@ public:
 	UWeaponSystem* WeaponSystem;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components)
-	USpotLightComponent* FlashlightComponent;
+	USpotLightComponent* Flashlight;
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnEquip OnEquip;
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnLightToggle OnLightToggle;
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnFlashlightEquipped OnFlashlightEquipped;
+	
+	bool FlashlightEquipped = false;
 	
 	UPROPERTY(EditDefaultsOnly, Category="Weapon")
 	TSubclassOf<AGunProjectile> ProjectileInClass;
@@ -60,7 +73,7 @@ public:
 	
 	bool EquipWeapon();
 	
-	bool EquipFlashlight();
+	void EquipFlashlight();
 	
 	void ToggleFlashlight();
 	

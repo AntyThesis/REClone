@@ -99,13 +99,15 @@ bool UItemEffectSystem::UseItem(const EEffectType EffectTypeToUse, const float E
 						return ItemFound;
 					}
 				}
-			}
+			}          
 			
 			return ItemFound;
 			break;
 		}	
 		
 	case EEffectType::EquipLight:
+		OwningCharacter->EquipFlashlight();
+		GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Emerald,"Flashlight Equipped");
 		return true;
 		break;
 		
