@@ -13,6 +13,7 @@ class UInventoryComponent;
 class UWeaponSystem;
 class UHealthComponent;
 class UItemEffectSystem;
+class USpotLightComponent;
 
 
 
@@ -36,6 +37,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components)
 	UWeaponSystem* WeaponSystem;
 	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components)
+	USpotLightComponent* FlashlightComponent;
+	
 	UPROPERTY(EditDefaultsOnly, Category="Weapon")
 	TSubclassOf<AGunProjectile> ProjectileInClass;
 	
@@ -55,6 +59,10 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 	bool EquipWeapon();
+	
+	bool EquipFlashlight();
+	
+	void ToggleFlashlight();
 	
 	void Interact();
 	

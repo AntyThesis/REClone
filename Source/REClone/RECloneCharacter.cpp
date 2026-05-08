@@ -8,6 +8,7 @@
 #include "HealthComponent.h"
 #include "InventoryComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/SpotLightComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -51,6 +52,9 @@ ARECloneCharacter::ARECloneCharacter()
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(FName("Inventory Component"));
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(FName("Health Component"));
 	ItemEffectSystem = CreateDefaultSubobject<UItemEffectSystem>(FName("Item Effect System"));
+	FlashlightComponent = CreateDefaultSubobject<USpotLightComponent>(FName("Flashlight Component"));
+	
+	FlashlightComponent->SetupAttachment(RootComponent);
 }
 
 void ARECloneCharacter::Tick(float DeltaSeconds)

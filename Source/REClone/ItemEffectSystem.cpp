@@ -104,6 +104,11 @@ bool UItemEffectSystem::UseItem(const EEffectType EffectTypeToUse, const float E
 			return ItemFound;
 			break;
 		}	
+		
+	case EEffectType::EquipLight:
+		return true;
+		break;
+		
 	case EEffectType::NoEffect:
 		return true;
 		break;
