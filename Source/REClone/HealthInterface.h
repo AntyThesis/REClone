@@ -23,6 +23,7 @@ class RECLONE_API IHealthInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	
+	// Declare the apply health change function
 	UFUNCTION(BlueprintNativeEvent, Category = "Health Interface")
 	void ApplyHealthChange(const float ChangeAmount);
 };

@@ -79,24 +79,27 @@ bool UItemEffectSystem::UseItem(const EEffectType EffectTypeToUse, const float E
 		{
 			GEngine->AddOnScreenDebugMessage(-1,5.f, FColor::Green,"Key Item Used");
 		
+			// Set the parameters for the sphere overlap actors
 			TArray<AActor*> OverlappingActors;
 			TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
 			TArray<AActor*> ActorsToIgnore;
-			
 			bool ItemFound = false;
-			
 			ActorsToIgnore.Add(OwningCharacter);
-			
 			ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECC_WorldDynamic));
 		
+			// Perform the sphere overlap
 			UKismetSystemLibrary::SphereOverlapActors(GetWorld(), OwningCharacter->GetActorLocation(),100.f,
 			ObjectTypes,AActor::StaticClass(),ActorsToIgnore,OverlappingActors);
 		
+			// iterate over the list of overlapping actors
 			for (const auto Actor : OverlappingActors)
 			{
+				// For each actor check to see if it has implemented the item interface
 				if (Actor->GetClass()->ImplementsInterface(UItemInterface::StaticClass()))
 				{
 					GEngine->AddOnScreenDebugMessage(-1,5.f, FColor::Green, FString::Printf(TEXT("Array Length: %d"), OverlappingActors.Num()));
+					
+					// Call the OnUnlock item interface function and if it succeeds success exit
 					if (IItemInterface::Execute_OnUnlock(Actor, OwningCharacter))
 					{
 						ItemFound = true;
