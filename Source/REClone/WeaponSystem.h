@@ -21,12 +21,15 @@ public:
 	// Sets default values for this component's properties
 	UWeaponSystem();
 	
+	// "Owning Character" of this component
 	UPROPERTY()
 	ARECloneCharacter* OwningCharacter;
 	
+	// The row handle for this weapons ammo
 	UPROPERTY(VisibleAnywhere)
 	FDataTableRowHandle AmmoItemRow;
 	
+	// Projectile class
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category="Weapon")
 	TSubclassOf<AGunProjectile> ProjectileClass;
 	
@@ -42,8 +45,10 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	// Fire Weapon
 	virtual void FireWeapon();
 	
+	// Try to affect the ammo of the "shooting character"
 	virtual void RequestAffectAmmo(const FDataTableRowHandle& AmmoType,const int Amount) const;
 		
 };

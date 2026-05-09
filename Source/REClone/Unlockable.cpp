@@ -9,6 +9,7 @@ AUnlockable::AUnlockable()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	
+	// Instantiate static mesh component
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(FName("Mesh"));
 
 }
@@ -22,13 +23,14 @@ void AUnlockable::BeginPlay()
 
 bool AUnlockable::OnUnlock_Implementation(ARECloneCharacter* UnlockingCharacter)
 {
-	
+	// If there is no "Unlocking Character", failure exit
 	if (!UnlockingCharacter)
 	{
 		GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Green, "No 'UnlockingCharacter' found");
 		return false;
 	}
 	
+	// Broadcast the "OnUnlocked" delegate  and success exit
 	OnUnlocked.Broadcast();
 	GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Green, "Door Unlocked");
 	return true;

@@ -19,9 +19,11 @@ public:
 	// Sets default values for this actor's properties
 	AUnlockable();
 	
+	// Declare the "OnUnlocked" delegate variable
 	UPROPERTY(BlueprintAssignable)
 	FOnUnlocked OnUnlocked;
 	
+	// Declare static mesh variable
 	UPROPERTY(BlueprintReadWrite,EditAnywhere, Category = "Mesh")
 	UStaticMeshComponent* Mesh;
 
@@ -29,6 +31,7 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 	
+	// OnUnlock interface implementation declaration
 	UFUNCTION()
 	virtual bool OnUnlock_Implementation(ARECloneCharacter* UnlockingCharacter) override;
 

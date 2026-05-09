@@ -13,9 +13,11 @@ UWeaponSystem::UWeaponSystem()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 	
+	// Find the item data table
 	static ConstructorHelpers::FObjectFinder<UDataTable> TableObj(
 	TEXT("/Game/TopDown/Blueprints/DT_ItemData.DT_ItemData"));
 	
+	// If the item data table is found, initialize the data table and the row name for the "AmmoItemRow"
 	if (TableObj.Succeeded())
 	{
 		AmmoItemRow.DataTable = TableObj.Object;
@@ -30,6 +32,8 @@ void UWeaponSystem::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	
+	// Set the "Owning Character"
 	OwningCharacter = Cast<ARECloneCharacter>(this->GetOwner());
 	
 
@@ -47,12 +51,15 @@ void UWeaponSystem::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 	// ...
 }
 
+
 void UWeaponSystem::FireWeapon()
 {
+	// Set the parameters for the "Spawn Actor" function
 	FActorSpawnParameters Params;
 	Params.Owner = GetOwner();
 	Params.Instigator = Cast<APawn>(GetOwner());
 
+	// Spawn the projectile
 	GetWorld()->SpawnActor<AGunProjectile>(
 		ProjectileClass,
 		 GetOwner()->GetActorLocation() + 
@@ -62,11 +69,13 @@ void UWeaponSystem::FireWeapon()
 	);
 	GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Black,"Weapon fired");
 
+	// Send request to affect the ammo count of the shooter
 	RequestAffectAmmo(AmmoItemRow,1);
 }
 
 void UWeaponSystem::RequestAffectAmmo(const FDataTableRowHandle& AmmoType,const int Amount) const
 {
+	// Affect the ammo of the shooter 
 	OwningCharacter->AffectAmmo(AmmoItemRow,Amount);
 }
 

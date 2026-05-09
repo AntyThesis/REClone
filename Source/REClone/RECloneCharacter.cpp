@@ -49,11 +49,14 @@ ARECloneCharacter::ARECloneCharacter()
 	PrimaryActorTick.bCanEverTick = true;
 	PrimaryActorTick.bStartWithTickEnabled = true;
 	
+	
+	// Instantiate the components
 	InventoryComponent = CreateDefaultSubobject<UInventoryComponent>(FName("Inventory Component"));
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(FName("Health Component"));
 	ItemEffectSystem = CreateDefaultSubobject<UItemEffectSystem>(FName("Item Effect System"));
 	Flashlight = CreateDefaultSubobject<USpotLightComponent>(FName("Flashlight Component"));
 	
+	//Set up Flashlight component
 	Flashlight->SetupAttachment(RootComponent);
 	Flashlight->SetVisibility(false);
 }
@@ -65,7 +68,10 @@ void ARECloneCharacter::Tick(float DeltaSeconds)
 
 void ARECloneCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent)
 {
+	
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	
+	//Bind the input actions
 	PlayerInputComponent->BindAction("Interact", IE_Pressed, this, &ARECloneCharacter::Interact);
 	PlayerInputComponent->BindAction("Fire Weapon",IE_Pressed,this, &ARECloneCharacter::FireWeaponRequest);
 	PlayerInputComponent->BindAction("ToggleFlashlight",IE_Pressed,this, &ARECloneCharacter::ToggleFlashlight);
@@ -73,8 +79,11 @@ void ARECloneCharacter::SetupPlayerInputComponent(class UInputComponent* PlayerI
 
 bool ARECloneCharacter::EquipWeapon() 
 {
+	// Set the weapon system
 	WeaponSystem = Cast<UWeaponSystem>(AddComponentByClass(UWeaponSystem::StaticClass(), false,FTransform::Identity,false));
 	
+	
+	// If there is a valid weapon system, set the projectile class and broadcast the "OnEquip" delegate and success exit
 	if ( WeaponSystem)
 	{
 		WeaponSystem->ProjectileClass = ProjectileInClass;
@@ -82,11 +91,14 @@ bool ARECloneCharacter::EquipWeapon()
 		OnEquip.Broadcast();
 		return true;
 	}
+	
+	// If there is no valid weapon system, failure exit
 	return false;
 }
 
 void ARECloneCharacter::EquipFlashlight()
 {
+	// Set "FlashlightEquipped" to true and broadcast the "OnFlashlightEquipped" delegate
 	FlashlightEquipped = true;
 	OnFlashlightEquipped.Broadcast();
 	
@@ -94,6 +106,7 @@ void ARECloneCharacter::EquipFlashlight()
 
 void ARECloneCharacter::ToggleFlashlight()
 {
+	// If there is a valid flashlight, Toggle it on or off
 	if (FlashlightEquipped)
 	{
 		if (Flashlight->GetVisibleFlag() == false)
@@ -108,6 +121,7 @@ void ARECloneCharacter::ToggleFlashlight()
 		}
 	
 	}
+	// if there is no valid flashlight throw an error
 	else
 	{
 		GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Red,"Flashlight not equipped");
@@ -116,11 +130,13 @@ void ARECloneCharacter::ToggleFlashlight()
 
 void ARECloneCharacter::Interact()
 {
+	// Set the overlap parameters
 	TArray<AActor*> OverlappingActors;
-
 	TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
 	ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_WorldDynamic));
 
+	
+	// Overlap to check for interactables
 	UKismetSystemLibrary::SphereOverlapActors(
 		GetWorld(),
 		GetActorLocation(),
@@ -130,22 +146,24 @@ void ARECloneCharacter::Interact()
 		TArray<AActor*>(),
 		OverlappingActors
 	);
-
+	// Draw a matching debug sphere
 	DrawDebugSphere(GetWorld(), GetActorLocation(), 100.f, 12, FColor::White, false, 5.f);
 
+	// Check to see if there are any overlapping actors 
 	if (OverlappingActors.Num() > 0)
 	{
+		// Check to see if the first overlapped actor is a pickup item
 		if (APickupItemBase* PickupItem = Cast<APickupItemBase>(OverlappingActors[0]))
 		{
+			// Create an inventory slot to add and set its variables
 			FInventorySlot InventorySlotToAdd;
-
-			// ✅ Use RowHandle instead of ItemData
 			InventorySlotToAdd.RowHandle = PickupItem->SlotData.RowHandle;
 			InventorySlotToAdd.Quantity = PickupItem->SlotData.Quantity;
-
+	
+			// Check to see if the inventory successfully added the item
 			if (InventoryComponent->AddItem(InventorySlotToAdd))
 			{
-				// Call interface
+				// If it did call the item interface if that item implements it
 				if (PickupItem->GetClass()->ImplementsInterface(UItemInterface::StaticClass()))
 				{
 					IItemInterface::Execute_OnPickup(PickupItem, this);
@@ -158,9 +176,10 @@ void ARECloneCharacter::Interact()
 void ARECloneCharacter::FireWeaponRequest()
 {
 	
-	
+	// Check to see if there is a valid weapon system
 	if (WeaponSystem != nullptr)
 	{
+		// Check to see if there are any bullets in the inventory
 		if (!InventoryComponent->HasBullets())
 		{
 			GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Red,"No bullets in inventory");
@@ -171,7 +190,7 @@ void ARECloneCharacter::FireWeaponRequest()
 		}
 	
 	}
-	
+	// If there is not a valid weapon system throw an error
 	else
 	{
 		GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Red,"No weapon equipped");
@@ -180,6 +199,7 @@ void ARECloneCharacter::FireWeaponRequest()
 
 void ARECloneCharacter::AffectAmmo(const FDataTableRowHandle& BulletsToRemove,const int Amount) const
 {
+	// Check to see if there is a valid inventory component and if so remove the bullets
 	if (InventoryComponent)
 	{
 		InventoryComponent->RemoveItem(BulletsToRemove,Amount);
@@ -188,6 +208,7 @@ void ARECloneCharacter::AffectAmmo(const FDataTableRowHandle& BulletsToRemove,co
 
 void ARECloneCharacter::ApplyHealthChange_Implementation(const float ChangeAmount)
 {
+	// Check to see if there is a valid health component. If so, affect health, if not, throw an error
 	if (HealthComponent)
 	{
 		HealthComponent->AffectHealth(ChangeAmount);

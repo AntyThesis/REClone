@@ -46,6 +46,7 @@ protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
 	uint32 bMoveToMouseCursor : 1;
 
+	// Set up the input component
 	virtual void SetupInputComponent() override;
 	
 	// To add mapping context

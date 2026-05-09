@@ -27,6 +27,7 @@ class ARECloneCharacter : public ACharacter, public IHealthInterface
 public:
 	ARECloneCharacter();
 	
+	// Declare Components
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components)
 	UInventoryComponent* InventoryComponent;
 	
@@ -42,6 +43,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Components)
 	USpotLightComponent* Flashlight;
 	
+	
+	
+	// Declare delegates
 	UPROPERTY(BlueprintAssignable)
 	FOnEquip OnEquip;
 	
@@ -51,8 +55,13 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnFlashlightEquipped OnFlashlightEquipped;
 	
+	
+	// Declare "Flashlight Equipped" variable
 	bool FlashlightEquipped = false;
 	
+	
+	
+	// Declare the class of projectile to be fed into the "Fire Weapon" call
 	UPROPERTY(EditDefaultsOnly, Category="Weapon")
 	TSubclassOf<AGunProjectile> ProjectileInClass;
 	
