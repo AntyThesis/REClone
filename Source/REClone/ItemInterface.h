@@ -24,9 +24,11 @@ class RECLONE_API IItemInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 	
+	// Interface function for picking up items
 	UFUNCTION(BlueprintNativeEvent,Category = "ItemInterface")
 	bool OnPickup(ARECloneCharacter* Interactor);
 	
+	// Interface function for unlocking doors
 	UFUNCTION(BlueprintNativeEvent,Category = "ItemInterface")
 	bool OnUnlock(ARECloneCharacter* UnlockingCharacter);
 	

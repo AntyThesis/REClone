@@ -31,6 +31,7 @@ struct FItemData : public FTableRowBase
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	float EffectValue;
 	
+	// Maximum amount that can occupy one inventory slot
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Item")
 	int MaxQuantity;
 };
@@ -40,9 +41,11 @@ struct FInventorySlot
 {
 	GENERATED_BODY()
 	
+	// Row handle that contains all the item data
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="InventorySlotData")
 	FDataTableRowHandle RowHandle;
 	
+	// The quantity of the item currently in the players inventory
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="InventorySlotData")
 	int Quantity;
 };

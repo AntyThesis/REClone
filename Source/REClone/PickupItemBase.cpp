@@ -36,7 +36,7 @@ void APickupItemBase::Tick(float DeltaTime)
 // IItemInterface Event Implementation
 bool APickupItemBase::OnPickup_Implementation(ARECloneCharacter* Interactor)
 {
-	
+	// Destroy this actor when its picked up successfully
 	Destroy();
 	return true;
 }

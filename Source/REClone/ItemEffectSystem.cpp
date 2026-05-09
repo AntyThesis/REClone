@@ -23,6 +23,7 @@ void UItemEffectSystem::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// Set the owning character and that characters health component
 	OwningCharacter = Cast<ARECloneCharacter>(GetOwner());
 	HealthComponent = Cast<UHealthComponent>(OwningCharacter->FindComponentByClass(UHealthComponent::StaticClass()));
 
@@ -41,9 +42,10 @@ void UItemEffectSystem::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 bool UItemEffectSystem::UseItem(const EEffectType EffectTypeToUse, const float EffectValueToUse) const
 {
 	
-	
+	// Using an item has a different effect that depends on the effect type
 	switch (EffectTypeToUse)
 	{
+		// Heal = Check for health component and if found heal the player
 	case EEffectType::Heal:
 		if (HealthComponent)
 		{
@@ -59,6 +61,7 @@ bool UItemEffectSystem::UseItem(const EEffectType EffectTypeToUse, const float E
 		}
 		break;
 	
+		// If the character successfully equips a weapon, success exit, if not, failure exit
 	case EEffectType::EquipWeapon:
 		GEngine->AddOnScreenDebugMessage(-1,5.f, FColor::Green,"Weapon Item Used");
 		if (OwningCharacter->EquipWeapon())
@@ -71,6 +74,7 @@ bool UItemEffectSystem::UseItem(const EEffectType EffectTypeToUse, const float E
 		}
 		break;
 		
+		// Unlock the door
 	case EEffectType::Unlock:
 		{
 			GEngine->AddOnScreenDebugMessage(-1,5.f, FColor::Green,"Key Item Used");
@@ -105,16 +109,19 @@ bool UItemEffectSystem::UseItem(const EEffectType EffectTypeToUse, const float E
 			break;
 		}	
 		
+		// The player equips the flashlight
 	case EEffectType::EquipLight:
 		OwningCharacter->EquipFlashlight();
 		GEngine->AddOnScreenDebugMessage(-1,5.f,FColor::Emerald,"Flashlight Equipped");
 		return true;
 		break;
 		
+		// For items that have no effect ie bullets
 	case EEffectType::NoEffect:
 		return true;
 		break;
 		
+		// Default case switch
 	default:
 		break;
 	}
