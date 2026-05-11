@@ -10,6 +10,7 @@ AEnemyBase::AEnemyBase()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	
+	// Instantiate a health component
 	HealthComponent = CreateDefaultSubobject<UHealthComponent>(FName("HealthComponent"));
 
 }
@@ -19,6 +20,7 @@ void AEnemyBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// Set health on spawm
 	SetHealth();
 	
 }
@@ -41,9 +43,12 @@ void AEnemyBase::SetHealth()
 {
 	//const FEnemyData* Data = Identity.EnemyRowHandle.GetRow<FEnemyData>(TEXT("Store Data"));
 	
+	// Store the enemy data 
 	if (const FEnemyData* Data = Identity.EnemyRowHandle.GetRow<FEnemyData>(TEXT("Store Data")))
 	{
+		// Set the enemy's current and max health
 		HealthComponent->MaxHealth = Data->MaxHealth;
+		HealthComponent->CurrentHealth = Data->MaxHealth;
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green,FString::Printf(TEXT("%f"), HealthComponent->MaxHealth));
 	}
 

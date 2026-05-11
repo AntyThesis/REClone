@@ -18,9 +18,11 @@ public:
 	// Sets default values for this character's properties
 	AEnemyBase();
 	
+	// Declare enemy identity
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Stats")
 	FEnemyIdentity Identity;
 	
+	// Declare health component
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	UHealthComponent* HealthComponent;
 	
@@ -37,6 +39,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
+	// Declare function for setting the health
 	virtual void SetHealth();
 
 };

@@ -19,7 +19,7 @@ public:
 	// Sets default values for this actor's properties
 	AGunProjectile();
 	
-	
+	// Declare components
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Mesh")
 	UStaticMeshComponent* Mesh;
 
@@ -38,6 +38,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 	
+	// Declare the OnBoxHit function
 	UFUNCTION()
 	void OnBoxHit(
 		UPrimitiveComponent* HitComponent,

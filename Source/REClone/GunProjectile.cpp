@@ -23,6 +23,7 @@ AGunProjectile::AGunProjectile()
 	ProjectileMovement->MaxSpeed = 1000.0f;
 	ProjectileMovement->ProjectileGravityScale = 0.0f;
 	
+	//Bind OnComponentHit delegate to the OnBoxHit function
 	CollisionBox->OnComponentHit.AddDynamic(this, &AGunProjectile::OnBoxHit);
 	
 	
@@ -52,6 +53,7 @@ void AGunProjectile::OnBoxHit(
 	FVector NormalImpulse,
 	const FHitResult& Hit)
 {
+	// Handle if the other actor is null or this
 	if (!OtherActor || OtherActor == this)
 		return;
 
