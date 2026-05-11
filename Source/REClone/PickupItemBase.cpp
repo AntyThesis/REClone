@@ -15,7 +15,7 @@ APickupItemBase::APickupItemBase()
 	// Add static mesh component and box collision
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(FName("StaticMeshComponent"));
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>(FName("BoxComponent"));
-
+	
 }
 
 // Called when the game starts or when spawned

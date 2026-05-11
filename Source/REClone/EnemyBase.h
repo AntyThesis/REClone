@@ -39,7 +39,7 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
-	// Declare function for setting the health
+	// Function for setting health
 	virtual void SetHealth();
 
 };
